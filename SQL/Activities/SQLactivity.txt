@@ -1,0 +1,121 @@
+
+
+
+
+Activity1
+
+
+create table salesman(
+                salesman_id int,
+                salesman_name varchar2(32),
+                salesman_city varchar2(32),
+                commission int
+                
+);
+
+ACTIVITY 2
+
+
+INSERT INTO salesman VALUES(5002, 'Nail Knite', 'Paris', 13);
+
+
+INSERT ALL
+    INTO salesman VALUES(5005, 'Pit Alex', 'London', 11)
+    INTO salesman VALUES(5006, 'McLyon', 'Paris', 14)
+    INTO salesman VALUES(5007, 'Paul Adam', 'Rome', 13)
+    INTO salesman VALUES(5003, 'Lauson Hen', 'San Jose', 12)
+SELECT 1 FROM DUAL;
+
+select * from salesman
+
+
+
+Activity3
+
+select salesman_id,salesman_city from salesman
+
+select * from salesman where salesman_city='Paris'
+
+select salesman_id,commission from salesman where salesman_name='Paul Adam'
+
+
+
+ACTIVITY 4
+
+ALTER TABLE salesman ADD grade int;
+UPDATE salesman SET grade=100
+select * from salesman
+
+
+Activity5
+
+UPDATE salesman SET grade=200 where salesman_city='Rome'
+
+UPDATE salesman SET grade=300 WHERE salesman_name='James Hoog';
+
+UPDATE salesman SET salesman_name='Pierre' WHERE salesman_name='McLyon';
+
+select * from salesman
+
+
+
+Activity6
+
+select DISTINCT SALESMAN_ID from orders
+select ORDER_NO,ORDER_DATE from orders ORDER BY ORDER_DATE ASC
+
+select ORDER_NO,PURCHASE_AMOUNT from orders ORDER BY PURCHASE_AMOUNT DESC
+select * from orders where PURCHASE_AMOUNT<500
+select * from orders where PURCHASE_AMOUNT BETWEEN 1000 and 2000
+
+
+Activity7
+
+select * from orders
+select sum(PURCHASE_AMOUNT) from orders
+select avg(PURCHASE_AMOUNT) from orders
+select max(PURCHASE_AMOUNT) from orders
+select min(PURCHASE_AMOUNT) from orders
+select count(distinct SALESMAN_ID) from orders
+
+
+Activity8
+
+SELECT customer_id, MAX(purchase_amount) FROM orders GROUP BY customer_id;
+
+SELECT salesman_id, order_date, MAX(purchase_amount) FROM orders 
+WHERE order_date=To_DATE('2012/08/17', 'YYYY/MM/DD') GROUP BY salesman_id, order_date;
+
+SELECT customer_id, order_date, MAX(purchase_amount) FROM orders
+GROUP BY customer_id, order_date
+HAVING MAX(purchase_amount) IN(2030, 3450, 5760, 6000);
+
+
+Activity 9
+
+select s.salesman_name AS "SalesmanName", c.customer_name AS "CUstomerName" from salesman s INNER JOIN customers c
+  on s.salesman_id=c.salesman_id
+
+SELECT a.customer_name, a.city, a.grade, b.name AS "Salesman", b.city FROM customers a 
+LEFT OUTER JOIN salesman b ON a.salesman_id=b.salesman_id WHERE a.grade<300 
+ORDER BY a.customer_id;
+
+SELECT a.customer_name, a.city, a.grade, b.salesman_name AS "Salesman", b.salesman_city FROM customers a 
+INNER JOIN salesman b ON a.salesman_id=b.salesman_id where b.commission>12 
+
+select o.order_no,o.order_date,o.purchase_amount,c.customer_name as "CustomerName",s.salesman_name as "SalemanName",s.commission as "Commision" from orders o
+INNER JOIN salesman s on s.salesman_id=o.salesman_id
+INNER JOIN customers c on c.customer_id=o.customer_id
+
+
+
+Activity 10
+
+SELECT * FROM orders
+WHERE salesman_id=(SELECT DISTINCT salesman_id FROM orders WHERE customer_id=3007);
+
+select * from orders where salesman_id IN(select salesman_id from salesman where salesman_city='New York')
+
+select grade,count(*) from customers group by grade having grade>(select avg(grade) from customers where city='New York')
+
+select * from orders where salesman_id=(select salesman_id from salesman where commission =(select max(commission) from salesman))
